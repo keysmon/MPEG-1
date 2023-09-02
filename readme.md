@@ -1,6 +1,6 @@
 ----Overview----
 
-MPEG-1 implementation in c++. It uses I frames and P frames. I frames are applied to every 15 frames and P frames are used for the other 14 frames. 
+MPEG-1 implementation in C++. It uses I frames and P frames. I frames are applied to every 15 frames and P frames are used for the other 14 frames. 
 Transformation: RLE, Delta and adaptive Huffman compression. Delta compression was implemented but not used due to less compression ratio in testing. The quality setting is achieved by adjusting the quantization matrix and the percentage of DCT coefficients to keep. 
 
 ----Feature Implemented----
