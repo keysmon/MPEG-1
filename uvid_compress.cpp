@@ -277,9 +277,7 @@ vector<unsigned char> huffman_compress (vector<unsigned char> image){
 		}
 	}
     result.push_back(temp);
-    //cout << "size "<<sss.size()/8 << endl;
-    //cout << sss.size()/8<<endl;
-    //cout<<sss<<endl;
+
     return result;
 }
 
@@ -398,26 +396,12 @@ vector<vector<unsigned char>> I_frame_encoder (vector<vector<unsigned char>> ima
                 }
             }
             
-            /*
-            cout << " shift down by 128" << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << block[i][j]<< " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-
+     
             // DCT transform
             block = dctTransform(block);
 
 
-            /*
-            cout << "DCT -- " << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << block[i][j]<< " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-
+  
 
 
             // Quantization transform
@@ -428,15 +412,7 @@ vector<vector<unsigned char>> I_frame_encoder (vector<vector<unsigned char>> ima
             }
 
 
-            /*
-            cout << "Quantization ---" << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << block[i][j]<< " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-
-            
+  
             
             vector<vector<unsigned char>> block_downsampled(8, vector<unsigned char>(8, 128));
             for (auto i: block_cords){
@@ -445,15 +421,7 @@ vector<vector<unsigned char>> I_frame_encoder (vector<vector<unsigned char>> ima
                 block_downsampled[x_index][y_index] = block[x_index][y_index] + 128;
             }         
 
-            /*
-            cout << "DC_part_removed and shift by 128" << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << int(block_downsampled[i][j]) << " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-            
-            /*
+
             auto block_flattened = zig_zag_flatten(block_downsampled);
             auto block_delta = delta_compress(block_flattened);
             auto block_huffman = huffman_compress(block_delta);*/
@@ -465,20 +433,6 @@ vector<vector<unsigned char>> I_frame_encoder (vector<vector<unsigned char>> ima
             auto t2 = t1;
 
 
-
-            //cout << int(DC_coeff) << endl;
-            /*
-            cout << "-- " << int(DC_coeff) << " --" << endl;
-
-            for (auto i:t1){
-                cout << int(i) << " ";
-            }cout << endl;
-            
-            for (auto i:t2){
-                cout << int(i) << " ";
-            }cout << endl<<endl;*/
-            
-            
 
 
             if (write_data){
@@ -500,14 +454,7 @@ vector<vector<unsigned char>> I_frame_encoder (vector<vector<unsigned char>> ima
             
             // decompressed frame 
 
-            /*
-            cout << endl;
-            cout << "------" << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << int(block[i][j]) << " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
+          
 
             for (size_t i = 0; i < block_size; i++) {
                 for (size_t j = 0; j < block_size; j++) {
@@ -515,40 +462,18 @@ vector<vector<unsigned char>> I_frame_encoder (vector<vector<unsigned char>> ima
                 }
             }
 
-            /*
-            cout << "De-Quantization " << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << block[i][j] << " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-
-
+    
             block = inverse_dctTransform(block);
 
 
-            /*
-            cout << "Reverse DCT" << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << block[i][j] << " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-            
+    
             
             for (int i =0;i<8;i++){
                 for (int j=0;j<8;j++){
                     block[i][j] = round_and_clamp_to_char(block[i][j] + 128); 
                 }
             }
-            /*
-            cout << "Decompressed result" << endl;
-            for (size_t i = 0; i < block_size; i++) {
-                for (size_t j = 0; j < block_size; j++) {
-                    cout << block[i][j] << " ";
-                }cout << endl;
-            }cout << endl<<endl;*/
-            
+
             // copy blocks back to image 
             for (int i = 0;i<block_size;i++){
                 for (int j=0;j<block_size;j++){
@@ -650,12 +575,9 @@ vector<vector<int>> motion_vectors_finder(vector<vector<unsigned char>> current_
                     current_block[m][n] = current_frame_padded[macro_block_height + m][macro_block_width + n];
                 }
             }
-            //cout << endl << macro_block_height << " - " << macro_block_width << endl;
             auto motion_vector = motion_vector_finder(current_block,reference_frame_padded,macro_block_height,macro_block_width);
             
-            //cout << macro_block_height << " - " << macro_block_width << endl;
-            //cout << motion_vector[0] << " | " << motion_vector[1] << endl;
-
+     
             motion_vectors.push_back(motion_vector);
         }
     }
@@ -747,24 +669,7 @@ vector<vector<unsigned char>> P_frame_encoder(vector<vector<unsigned char>> imag
         }      
     }
     
-    /*
-    cout << endl;
-    cout << "P Frame "<<endl;
-    cout << MVs[0][0] << " || " << MVs[0][1] << endl;
-    cout << "original" << endl;
-    for (int i=0;i<15;i++){
-        for (int j=0;j<15;j++){
-            cout << int(image[i][j]) << " ";
-        }cout << endl;
-    }cout << endl;
 
-    
-    cout << "Ref" << endl;
-    for (int i=0;i<15;i++){
-        for (int j=0;j<15;j++){
-            cout << int(ref[i][j]) << " ";
-        }cout << endl;
-    }cout << endl;*/
     
     
     
@@ -773,26 +678,6 @@ vector<vector<unsigned char>> P_frame_encoder(vector<vector<unsigned char>> imag
     auto res = frame_from_difference(diff_decompressed,ref,MVs);
 
 
-    /*
-    cout << "diff" << endl;
-    for (int i=0;i<15;i++){
-        for (int j=0;j<15;j++){
-            cout << int(diff[i][j]-128) << " ";
-        }cout << endl;
-    }cout << endl;
-    cout << "decompressed diff" << endl;
-    for (int i=0;i<15;i++){
-        for (int j=0;j<15;j++){
-            cout << int(diff_decompressed[i][j] - 128) << " ";
-        }cout << endl;
-    }cout << endl;
-
-    cout << "result" << endl;
-    for (int i=0;i<15;i++){
-        for (int j=0;j<15;j++){
-            cout << int(res[i][j]) << " ";
-        }cout << endl;
-    }cout << endl<<endl;*/
     return res;
 }
 
@@ -875,38 +760,6 @@ int main(int argc, char** argv){
             Y_buffer = (frame_Y);
             Cb_buffer = (frame_Cb);
             Cr_buffer = (frame_Cr);
-            /*
-            cout << "---- I_frame ----" << endl;
-            for (int i = 0;i<10;i++){
-                for (int j=0;j<10;j++){
-                    cout << int(Y_buffer[i][j]) << " ";
-                }cout << endl;
-            }cout << endl;
-            for (int i = 0;i<10;i++){
-                for (int j=0;j<10;j++){
-                    cout << int(Y[i][j]) << " ";
-                }cout << endl;
-            }cout << endl;
-            for (int i = 0;i<10;i++){
-                for (int j=0;j<10;j++){
-                    cout << int(Cb_buffer[i][j]) << " ";
-                }cout << endl;
-            }cout << endl<<endl;
-            for (int i = 0;i<10;i++){
-                for (int j=0;j<10;j++){
-                    cout << int(Cb[i][j]) << " ";
-                }cout << endl;
-            }cout << endl;
-            for (int i = 0;i<10;i++){
-                for (int j=0;j<10;j++){
-                    cout << int(Cr_buffer[i][j]) << " ";
-                }cout << endl;
-            }cout << endl;
-            for (int i = 0;i<10;i++){
-                for (int j=0;j<10;j++){
-                    cout << int(Cr[i][j]) << " ";
-                }cout << endl;
-            }cout << endl<<endl; */
             
 
 
@@ -920,20 +773,7 @@ int main(int argc, char** argv){
             Cb_buffer = (frame_Cb);
             Cr_buffer = (frame_Cr);
         }  
-        /*
-        cout << "---- frame  "<< total_frames<<" ----" << endl;
-        cout << "Original" << endl;
-        for (int i = 0;i<10;i++){
-            for (int j=0;j<10;j++){
-                cout << int(Y[i][j]) << " ";
-            }cout << endl;
-        }cout << endl;
-        cout << "decompressed" << endl;
-        for (int i = 0;i<10;i++){
-            for (int j=0;j<10;j++){
-                cout << int(Y_buffer[i][j]) << " ";
-            }cout << endl;
-        }cout << endl<<endl;*/
+      
         
      
         
